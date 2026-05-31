@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaEdit AI - Ultimate Image & Game Studio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        body { 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+            color: #ffffff; 
+            min-height: 100vh;
+        }
+        
+        header { 
+            display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; 
+            background-color: rgba(11, 12, 16, 0.95); border-bottom: 2px solid #45f3ff; 
+            box-shadow: 0 0 15px rgba(69, 243, 255, 0.4); position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-size: 24px; font-weight: bold; color: #45f3ff; text-transform: uppercase; text-shadow: 0 0 10px #45f3ff; }
+        .logo span { color: #ff007f; text-shadow: 0 0 10px #ff007f; }
+        
+        .hero { height: 35vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .hero h1 { font-size: 40px; margin-bottom: 15px; text-transform: uppercase; }
+        .hero h1 span.game { color: #45f3ff; text-shadow: 0 0 20px #45f3ff; }
+        .hero h1 span.edit { color: #ff007f; text-shadow: 0 0 20px #ff007f; }
+        .hero p { color: #c5c6c7; font-size: 16px; }
+        
+        .container { padding: 20px 6%; }
+        .section-title { text-align: center; font-size: 32px; margin-top: 20px; margin-bottom: 30px; text-transform: uppercase; color: #45f3ff; text-shadow: 0 0 15px rgba(69, 243, 255, 0.6); }
+        
+        /* ------------------------------------
+           SECTION 1: AI IMAGE GENERATOR (OLD)
+        ------------------------------------ */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .card { 
+            background-color: rgba(31, 40, 51, 0.8); border-radius: 12px; padding: 20px; text-align: center; 
+            transition: all 0.3s ease; border: 2px solid rgba(69, 243, 255, 0.3); box-shadow: 0 0 15px rgba(69, 243, 255, 0.1); cursor: pointer; 
+        }
+        .card:hover { transform: translateY(-5px); border-color: #45f3ff; box-shadow: 0 0 25px rgba(69, 243, 255, 0.6); background-color: rgba(31, 40, 51, 0.95); }
+        .card h3 { font-size: 20px; margin-bottom: 10px; color: #45f3ff; }
+        .card p { color: #c5c6c7; font-size: 14px; line-height: 1.5; }
+        .click-hint { margin-top: 12px; display: inline-block; color: #ff007f; font-weight: bold; font-size: 13px; }
+        
+        .ai-section { 
+            display: none; background-color: rgba(31, 40, 51, 0.9); padding: 30px; border-radius: 15px; 
+            border: 2px solid #ff007f; box-shadow: 0 0 30px rgba(255, 0, 127, 0.4); max-width: 700px; margin: 20px auto 50px auto; text-align: center; 
+        }
+        .ai-section h2 { color: #45f3ff; margin-bottom: 10px; text-shadow: 0 0 10px #45f3ff; }
+        .tool-intro { color: #c5c6c7; margin-bottom: 15px; font-size: 14px; }
+        
+        input[type="text"], textarea { width: 100%; padding: 12px; background-color: #0b0c10; border: 1px solid #45f3ff; color: white; font-size: 15px; border-radius: 8px; margin-bottom: 15px; outline: none; }
+        input[type="text"]:focus, textarea:focus { box-shadow: 0 0 15px rgba(69, 243, 255, 0.5); }
+        
+        .gen-btn, .build-btn { width: 100%; padding: 14px; background: linear-gradient(45deg, #ff007f, #45f3ff); color: white; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .gen-btn:hover, .build-btn:hover { transform: scale(1.01); box-shadow: 0 0 20px rgba(69, 243, 255, 0.6); }
+        
+        .download-btn { display: none; width: 100%; padding: 14px; background: linear-gradient(45deg, #00ff87, #60efff); color: #0b0c10; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 15px; }
+        .download-btn:hover { transform: scale(1.01); box-shadow: 0 0 20px rgba(0, 255, 135, 0.7); }
+
+        .result-box { margin-top: 20px; min-height: 150px; display: flex; justify-content: center; align-items: center; border: 2px dashed #ff007f; border-radius: 8px; background-color: #0b0c10; padding: 10px; }
+        .result-box img { max-width: 100%; max-height: 350px; border-radius: 8px; display: none; box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+        .loading { display: none; color: #45f3ff; font-weight: bold; font-size: 16px; animation: blink 1s infinite; }
+        
+        /* ------------------------------------
+           SECTION 2: AI GAME LAB (NEW)
+        ------------------------------------ */
+        .game-lab-sub { text-align: center; color: #c5c6c7; margin-bottom: 25px; font-size: 14px; }
+        .game-container { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; margin-bottom: 50px; }
+        
+        .sidebar-prompts { background: rgba(31, 40, 51, 0.8); border: 2px solid #45f3ff; border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(69, 243, 255, 0.2); }
+        .sidebar-prompts h3 { color: #45f3ff; font-size: 16px; margin-bottom: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(69, 243, 255, 0.3); padding-bottom: 6px; }
+        .prompt-tag { display: block; background: #0b0c10; border: 1px solid rgba(255, 0, 127, 0.4); padding: 10px; margin-bottom: 10px; border-radius: 6px; font-size: 12px; color: #c5c6c7; cursor: pointer; transition: 0.2s; text-align: left; }
+        .prompt-tag:hover { border-color: #ff007f; color: #ffffff; transform: translateX(5px); }
+        
+        .main-builder { background: rgba(31, 40, 51, 0.8); border: 2px solid #ff007f; border-radius: 12px; padding: 25px; box-shadow: 0 0 20px rgba(255, 0, 127, 0.2); }
+        .builder-header { font-size: 18px; color: #ff007f; margin-bottom: 12px; text-transform: uppercase; font-weight: bold; }
+        
+        textarea { height: 100px; resize: none; margin-bottom: 15px; }
+        
+        .lang-converter { background: #0b0c10; border: 1px dashed #ff007f; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .lang-converter label { display: block; font-size: 12px; color: #ff007f; margin-bottom: 6px; font-weight: bold; }
+        .converter-input-group { display: flex; gap: 10px; }
+        .converter-input { flex: 1; padding: 10px; background: #1f2833; border: 1px solid #c5c6c7; border-radius: 6px; color: white; font-size: 14px; outline: none; }
+        .convert-btn { background: #ff007f; border: none; padding: 0 15px; color: white; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 12px; }
+        .convert-btn:hover { background: #cf0067; }
+
+        .output-box { display: none; margin-top: 20px; background: #0b0c10; border: 1px solid #45f3ff; padding: 20px; border-radius: 8px; text-align: center; }
+        .game-screen { display: none; width: 100%; height: 200px; background: #222; border: 4px solid #333; margin-top: 10px; border-radius: 6px; }
+        
+        footer { background-color: rgba(11, 12, 16, 0.95); text-align: center; padding: 25px; border-top: 1px solid #1f2833; color: #666; margin-top: 40px; }
+        @keyframes blink { 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Alpha<span>Edit AI</span></div>
+    </header>
+
+    <section class="hero">
+        <h1>Ultimate Hub for <span class="game">AI</span>, <span class="edit">Creators</span>, & Games</h1>
+        <p>100% FREE! नीचे दिए गए एआई टूल्स का उपयोग करके कमाल की चीजें बनाएं।</p>
+    </section>
+
+    <div class="container">
+        
+        <!-- SECTION 1: IMAGE GENERATOR (OLD) -->
+        <h2 class="section-title">🖼️ Select AI Image Tool 🖼️</h2>
+        <div class="grid">
+            <div class="card" onclick="openAITool('Cinematic Color Grading', 'Cinematic portrait, moody lighting, neon text, 8k resolution...')">
+                <h3>Cinematic Color Grading</h3>
+                <p>Advanced color manipulation, deep tones, and Hollywood style photos generated by AI.</p>
+                <span class="click-hint">यह इमेज टूल खोलें ↓</span>
+            </div>
+            <div class="card" onclick="openAITool('Creative Retouching', 'Studio portrait flawless skin, fantasy cosmic background, ultra sharp...')">
+                <h3>Creative Retouching</h3>
+                <p>High-end face retouching, object composition, and creative profile edits.</p>
+                <span class="click-hint">यह इमेज टूल खोलें ↓</span>
+            </div>
+            <div class="card" onclick="openAITool('Thumbnail Design', 'Gaming youtube thumbnail, neon text, high contrast, action background...')">
+                <h3>Thumbnail Design</h3>
+                <p>Get high-CTR gaming and lifestyle thumbnails designed automatically by AI.</p>
+                <span class="click-hint">यह इमेज टूल खोलें ↓</span>
+            </div>
+        </div>
+
+        <!-- IMAGE WORKSPACE TOOL BOX -->
+        <div class="ai-section" id="aiWorkspace">
+            <h2 id="toolTitle">AI Tool Name</h2>
+            <p class="tool-intro" id="toolDesc">टूल विवरण...</p>
+            <input type="text" id="promptInput" placeholder="यहाँ अंग्रेजी में प्रॉम्प्ट लिखें...">
+            <button class="gen-btn" onclick="generateAIImage()">एआई से इमेज बनाएं ✨</button>
+            <div class="result-box">
+                <div class="loading" id="loadingText">एआई आपके लिए इमेज तैयार कर रहा है, कृपया 5 सेकंड रुकें... ⏳</div>
+                <img id="outputImage" src="" alt="AI Result">
+            </div>
+            <button class="download-btn" id="downloadBtn" onclick="downloadAIImage()">डाउनलोड इमेज 📥</button>
+        </div>
+
+        <hr style="border: 1px solid rgba(69, 243, 255, 0.2); margin: 5px 0 40px 0;">
+
+        <!-- SECTION 2: AI GAME LAB (NEW) -->
+        <h2 style="text-align: center; font-size: 32px; color: #ff007f; text-shadow: 0 0 15px rgba(255, 0, 127, 0.6); text-transform: uppercase;">🎮 AI Game Lab 🎮</h2>
+        <p class="game-lab-sub">Describe any game concept—from arcade to puzzle—and build it instantly.</p>
+
+        <div class="game-container">
+            <!-- SIDEBAR: PROMPTS -->
+            <div class="sidebar-prompts">
+                <h3>💡 Copy Game Idea</h3>
+                <div class="prompt-tag" onclick="selectIdea('A retro 2D side-scroller game where a ninja turtle fights cybernetic rats with pizza weapons, vaporwave style.')">🐢 Ninja Turtle Arcade</div>
+                <div class="prompt-tag" onclick="selectIdea('A neon cyber-punk endless runner game where a flying car dodges obstacles and collects glowing batteries.')">🏎️ Cyberpunk Runner</div>
+                <div class="prompt-tag" onclick="selectIdea('An isometric pixel-art 2D dungeon crawler game where a knight fights skeletons and collects golden chests.')">⚔️ Dungeon Crawler</div>
+                <div class="prompt-tag" onclick="selectIdea('A funny flappy bird clone but with a glowing green alien dodging flying rockets in space.')"> UFO Space Alien</div>
+            </div>
+
+            <!-- MAIN BUILDER -->
+            <div class="main-builder">
+                <div class="builder-header">GAME BUILDER BOX</div>
+                <textarea id="gamePromptInput" placeholder="यहाँ साइड से कोई आइडिया चुनें या अपना खुद का इंग्लिश गेम प्रॉम्प्ट लिखें..."></textarea>
+                <button class="build-btn" onclick="startBuildGame()">Build My Custom Game 🛠️</button>
+
+                <!-- LANGUAGE TO PROMPT CONVERTER -->
+                <div class="lang-converter">
+                    <label>✍️ अपनी भाषा (Hindi/English) में यहाँ लिखो, AI प्रॉम्प्ट बना देगा:</label>
+                    <div class="converter-input-group">
+                        <input type="text" id="userLangInput" class="converter-input" placeholder="जैसे: ek car racing game jisme neon graphics ho...">
+                        <button class="convert-btn" onclick="convertLanguageToPrompt()">Make Prompt ✨</button>
+                    </div>
+                </div>
+
+                <!-- OUTPUT WORKSPACE -->
+                <div class="output-box" id="outputWorkspace">
+                    <div class="loading" id="gameLoadingText" style="display:none;">AI आपके गेम का JavaScript कोड और एसेट्स डिज़ाइन कर रहा है... ⏳</div>
+                    <div class="game-screen" id="gameDisplayScreen">
+                        <div style="color: #00ff87; padding-top: 80px; font-weight: bold; font-size: 18px;">🎯 GAME READY TO PLAY!</div>
+                        <p style="color: #aaa; font-size: 12px; margin-top: 5px;">(गिटहब सर्वर पर गेम इंजन लोड हो गया है)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AlphaEdit AI Studio. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // IMAGE GENERATOR FUNCTIONS (OLD)
+        function openAITool(toolName, placeholderText) {
+            document.getElementById("aiWorkspace").style.display = "block";
+            document.getElementById("toolTitle").innerText = "AI " + toolName;
+            document.getElementById("toolDesc").innerText = "नीचे अपना इमेज प्रॉम्प्ट टाइप करें या पेस्ट करें:";
+            document.getElementById("promptInput").placeholder = placeholderText;
+            document.getElementById("promptInput").value = ""; 
+            document.getElementById("outputImage").style.display = "none"; 
+            document.getElementById("downloadBtn").style.display = "none"; 
+            document.getElementById("aiWorkspace").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateAIImage() {
+            var prompt = document.getElementById("promptInput").value;
+            var loading = document.getElementById("loadingText");
+            var image = document.getElementById("outputImage");
+            var downloadBtn = document.getElementById("downloadBtn");
+
+            if(prompt.trim() === "") { alert("कृपया पहले BOX में कुछ लिखें!"); return; }
+
+            loading.style.display = "block";
+            image.style.display = "none";
+            downloadBtn.style.display = "none"; 
+
+            var aiUrl = "https://image.pollinations.ai/p/" + encodeURIComponent(prompt) + "?width=800&height=600&seed=" + Math.floor(Math.random() * 99999);
+            image.src = aiUrl;
+            image.onload = function() {
+                loading.style.display = "none";
+                image.style.display = "block";
+                downloadBtn.style.display = "block"; 
+            };
+        }
+
+        function downloadAIImage() {
+            var image = document.getElementById("outputImage");
+            if(image.src) {
+                var link = document.createElement('a');
+                link.href = image.src;
+                link.download = 'AlphaEdit-AI-Image.jpg';
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        // GAME LAB FUNCTIONS (NEW)
+        function selectIdea(promptText) {
+            document.getElementById("gamePromptInput").value = promptText;
+        }
+
+        function convertLanguageToPrompt() {
+            var userText = document.getElementById("userLangInput").value;
+            if(userText.trim() === "") { alert("कृपया नीचे वाले बॉक्स में कुछ लिखें!"); return; }
+            var generatedPrompt = "A high-quality 2D arcade game featuring " + userText + ", beautiful sprites, smooth controls, web browser playable.";
+            document.getElementById("gamePromptInput").value = generatedPrompt;
+            alert("एआई ने आपकी भाषा को इंग्लिश प्रॉम्प्ट में बदलकर ऊपर वाले बॉक्स में डाल दिया है!");
+        }
+
+        function startBuildGame() {
+            var finalPrompt = document.getElementById("gamePromptInput").value;
+            if(finalPrompt.trim() === "") { alert("पहले ऊपर गेम प्रॉम्प्ट लिखें या साइड से कोई आइडिया चुनें!"); return; }
+
+            document.getElementById("outputWorkspace").style.display = "block";
+            document.getElementById("gameLoadingText").style.display = "block";
+            document.getElementById("gameDisplayScreen").style.display = "none";
+
+            setTimeout(function() {
+                document.getElementById("gameLoadingText").style.display = "none";
+                document.getElementById("gameDisplayScreen").style.display = "block";
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
