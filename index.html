@@ -31,9 +31,6 @@
         .container { padding: 20px 6%; }
         .section-title { text-align: center; font-size: 32px; margin-top: 20px; margin-bottom: 30px; text-transform: uppercase; color: #45f3ff; text-shadow: 0 0 15px rgba(69, 243, 255, 0.6); }
         
-        /* ------------------------------------
-           SECTION 1: AI IMAGE GENERATOR (OLD)
-        ------------------------------------ */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
         .card { 
             background-color: rgba(31, 40, 51, 0.8); border-radius: 12px; padding: 20px; text-align: center; 
@@ -64,9 +61,6 @@
         .result-box img { max-width: 100%; max-height: 350px; border-radius: 8px; display: none; box-shadow: 0 0 20px rgba(255,255,255,0.1); }
         .loading { display: none; color: #45f3ff; font-weight: bold; font-size: 16px; animation: blink 1s infinite; }
         
-        /* ------------------------------------
-           SECTION 2: AI GAME LAB (NEW)
-        ------------------------------------ */
         .game-lab-sub { text-align: center; color: #c5c6c7; margin-bottom: 25px; font-size: 14px; }
         .game-container { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; margin-bottom: 50px; }
         
@@ -88,7 +82,7 @@
         .convert-btn:hover { background: #cf0067; }
 
         .output-box { display: none; margin-top: 20px; background: #0b0c10; border: 1px solid #45f3ff; padding: 20px; border-radius: 8px; text-align: center; }
-        .game-screen { display: none; width: 100%; height: 200px; background: #222; border: 4px solid #333; margin-top: 10px; border-radius: 6px; }
+        .game-screen { display: none; width: 100%; min-height: 220px; background: #222; border: 4px solid #333; margin-top: 10px; border-radius: 6px; padding: 10px; }
         
         footer { background-color: rgba(11, 12, 16, 0.95); text-align: center; padding: 25px; border-top: 1px solid #1f2833; color: #666; margin-top: 40px; }
         @keyframes blink { 50% { opacity: 0.5; } }
@@ -107,7 +101,7 @@
 
     <div class="container">
         
-        <!-- SECTION 1: IMAGE GENERATOR (OLD) -->
+        <!-- SECTION 1: IMAGE GENERATOR -->
         <h2 class="section-title">🖼️ Select AI Image Tool 🖼️</h2>
         <div class="grid">
             <div class="card" onclick="openAITool('Cinematic Color Grading', 'Cinematic portrait, moody lighting, neon text, 8k resolution...')">
@@ -142,7 +136,7 @@
 
         <hr style="border: 1px solid rgba(69, 243, 255, 0.2); margin: 5px 0 40px 0;">
 
-        <!-- SECTION 2: AI GAME LAB (NEW) -->
+        <!-- SECTION 2: AI GAME LAB -->
         <h2 style="text-align: center; font-size: 32px; color: #ff007f; text-shadow: 0 0 15px rgba(255, 0, 127, 0.6); text-transform: uppercase;">🎮 AI Game Lab 🎮</h2>
         <p class="game-lab-sub">Describe any game concept—from arcade to puzzle—and build it instantly.</p>
 
@@ -153,13 +147,13 @@
                 <div class="prompt-tag" onclick="selectIdea('A retro 2D side-scroller game where a ninja turtle fights cybernetic rats with pizza weapons, vaporwave style.')">🐢 Ninja Turtle Arcade</div>
                 <div class="prompt-tag" onclick="selectIdea('A neon cyber-punk endless runner game where a flying car dodges obstacles and collects glowing batteries.')">🏎️ Cyberpunk Runner</div>
                 <div class="prompt-tag" onclick="selectIdea('An isometric pixel-art 2D dungeon crawler game where a knight fights skeletons and collects golden chests.')">⚔️ Dungeon Crawler</div>
-                <div class="prompt-tag" onclick="selectIdea('A funny flappy bird clone but with a glowing green alien dodging flying rockets in space.')"> UFO Space Alien</div>
+                <div class="prompt-tag" onclick="selectIdea('A funny flappy bird clone but with a glowing green alien dodging flying rockets in space.')">🛸 UFO Space Alien</div>
             </div>
 
             <!-- MAIN BUILDER -->
             <div class="main-builder">
                 <div class="builder-header">GAME BUILDER BOX</div>
-                <textarea id="gamePromptInput" placeholder="यहाँ साइड से कोई आइडिया चुनें या अपना खुद का इंग्लिश गेम प्रॉम्प्ट लिखें..."></textarea>
+                <textarea id="gamePromptInput" placeholder="यहाँ साइड से कोई आइडिया चुनें या अपना खुद का इंग्लिश गेम प्रॉप्ट लिखें..."></textarea>
                 <button class="build-btn" onclick="startBuildGame()">Build My Custom Game 🛠️</button>
 
                 <!-- LANGUAGE TO PROMPT CONVERTER -->
@@ -173,11 +167,8 @@
 
                 <!-- OUTPUT WORKSPACE -->
                 <div class="output-box" id="outputWorkspace">
-                    <div class="loading" id="gameLoadingText" style="display:none;">AI आपके गेम का JavaScript कोड और एसेट्स डिज़ाइन कर रहा है... ⏳</div>
-                    <div class="game-screen" id="gameDisplayScreen">
-                        <div style="color: #00ff87; padding-top: 80px; font-weight: bold; font-size: 18px;">🎯 GAME READY TO PLAY!</div>
-                        <p style="color: #aaa; font-size: 12px; margin-top: 5px;">(गिटहब सर्वर पर गेम इंजन लोड हो गया है)</p>
-                    </div>
+                    <div class="loading" id="gameLoadingText" style="display:none;">AI आपके गेम का JavaScript कोड और एसेट्स डिज़ाइन कर रहा है... ⏳</div>
+                    <div class="game-screen" id="gameDisplayScreen"></div>
                 </div>
             </div>
         </div>
@@ -186,10 +177,17 @@
 
     <footer>
         <p>&copy; 2026 AlphaEdit AI Studio. All Rights Reserved.</p>
+        <!-- विज़िटर काउंटर -->
+        <p align="center" style="margin-top: 15px;">
+          <img src="https://profile-counter.glitch.me/suranderkumar/count.svg" alt="Visitor Count" />
+        </p>
     </footer>
 
     <script>
-        // IMAGE GENERATOR FUNCTIONS (OLD)
+        var gameAnimationId = null;
+        var snakeTimerId = null;
+
+        // IMAGE GENERATOR FUNCTIONS
         function openAITool(toolName, placeholderText) {
             document.getElementById("aiWorkspace").style.display = "block";
             document.getElementById("toolTitle").innerText = "AI " + toolName;
@@ -235,7 +233,7 @@
             }
         }
 
-        // GAME LAB FUNCTIONS (NEW)
+        // GAME LAB FUNCTIONS
         function selectIdea(promptText) {
             document.getElementById("gamePromptInput").value = promptText;
         }
@@ -249,8 +247,12 @@
         }
 
         function startBuildGame() {
-            var finalPrompt = document.getElementById("gamePromptInput").value;
+            var finalPrompt = document.getElementById("gamePromptInput").value.toLowerCase();
             if(finalPrompt.trim() === "") { alert("पहले ऊपर गेम प्रॉम्प्ट लिखें या साइड से कोई आइडिया चुनें!"); return; }
+
+            // पुराने चल रहे गेम्स को बंद करना
+            if(gameAnimationId) { cancelAnimationFrame(gameAnimationId); }
+            if(snakeTimerId) { clearTimeout(snakeTimerId); }
 
             document.getElementById("outputWorkspace").style.display = "block";
             document.getElementById("gameLoadingText").style.display = "block";
@@ -259,13 +261,125 @@
             setTimeout(function() {
                 document.getElementById("gameLoadingText").style.display = "none";
                 document.getElementById("gameDisplayScreen").style.display = "block";
-            }, 4000);
+                
+                if (finalPrompt.includes("car") || finalPrompt.includes("runner") || finalPrompt.includes("turtle")) {
+                    document.getElementById("gameDisplayScreen").innerHTML = `
+                        <div style="color: #00ff87; font-weight: bold; font-size: 16px; margin-bottom: 5px;">🏎️ CYBERPUNK RUNNER READY!</div>
+                        <canvas id="gameCanvas" width="400" height="150" style="background: #111; border: 2px solid #45f3ff; display: block; margin: 0 auto;"></canvas>
+                        <p style="color: #aaa; font-size: 12px; margin-top: 5px;">(बाधाओं से बचने के लिए स्क्रीन पर कहीं भी क्लिक करें!)</p>
+                    `;
+                    startCarRunnerGame();
+                } 
+                else if (finalPrompt.includes("ufo") || finalPrompt.includes("space") || finalPrompt.includes("alien")) {
+                    document.getElementById("gameDisplayScreen").innerHTML = `
+                        <div style="color: #00ff87; font-weight: bold; font-size: 16px; margin-bottom: 5px;">🚀 SPACE ALIEN ATTACK READY!</div>
+                        <canvas id="gameCanvas" width="400" height="150" style="background: #050510; border: 2px solid #ff007f; display: block; margin: 0 auto;"></canvas>
+                        <p style="color: #aaa; font-size: 12px; margin-top: 5px;">(माउस हिलाकर रॉकेट्स से अपने यूएफओ को बचाएं!)</p>
+                    `;
+                    startSpaceGame();
+                } 
+                else {
+                    document.getElementById("gameDisplayScreen").innerHTML = `
+                        <div style="color: #00ff87; font-weight: bold; font-size: 16px; margin-bottom: 5px;">🐍 CLASSIC SNAKE GAME READY!</div>
+                        <canvas id="gameCanvas" width="400" height="150" style="background: #000; border: 2px solid #00ff87; display: block; margin: 0 auto;"></canvas>
+                        <p style="color: #aaa; font-size: 12px; margin-top: 5px;">(कंट्रोल करने के लिए कीबोर्ड की Arrow Keys या W,A,S,D का उपयोग करें!)</p>
+                    `;
+                    startSnakeGame();
+                }
+            }, 3000);
+        }
+
+        // 1. कार रनर गेम
+        function startCarRunnerGame() {
+            var canvas = document.getElementById("gameCanvas"); if(!canvas) return;
+            var ctx = canvas.getContext("2d");
+            var carY = 110, isJumping = false, jumpSpeed = 0, gravity = 0.6;
+            var obstacleX = 400, obstacleSpeed = 4, score = 0;
+
+            canvas.addEventListener('click', function() { if(!isJumping) { isJumping = true; jumpSpeed = -10; } });
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#333"; ctx.fillRect(0, 130, canvas.width, 20);
+                
+                if(isJumping) { carY += jumpSpeed; jumpSpeed += gravity; if(carY >= 110) { carY = 110; isJumping = false; } }
+                ctx.fillStyle = "#45f3ff"; ctx.fillRect(40, carY, 30, 20);
+                
+                obstacleX -= obstacleSpeed; if(obstacleX < -20) { obstacleX = 400; score++; obstacleSpeed += 0.2; }
+                ctx.fillStyle = "#ff007f"; ctx.fillRect(obstacleX, 110, 15, 20);
+                
+                ctx.fillStyle = "#fff"; ctx.font = "14px Arial"; ctx.fillText("Score: " + score, 10, 20);
+                
+                if(obstacleX > 40 && obstacleX < 70 && carY >= 100) { score = 0; obstacleX = 400; obstacleSpeed = 4; }
+                gameAnimationId = requestAnimationFrame(update);
+            }
+            update();
+        }
+
+        // 2. स्पेस गेम
+        function startSpaceGame() {
+            var canvas = document.getElementById("gameCanvas"); if(!canvas) return;
+            var ctx = canvas.getContext("2d");
+            var ufoX = 50, ufoY = 75;
+            var rocketX = 400, rocketY = Math.random() * 120, rocketSpeed = 5, score = 0;
+
+            canvas.addEventListener('mousemove', function(e) {
+                var rect = canvas.getBoundingClientRect();
+                ufoY = e.clientY - rect.top - 10;
+            });
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#ff007f"; ctx.beginPath(); ctx.arc(ufoX, ufoY, 12, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = "#fff"; ctx.fillRect(ufoX-18, ufoY, 36, 4);
+                
+                rocketX -= rocketSpeed; if(rocketX < -20) { rocketX = 400; rocketY = Math.random() * 120; score++; }
+                ctx.fillStyle = "#00ff87"; ctx.fillRect(rocketX, rocketY, 25, 10);
+                
+                ctx.fillStyle = "#fff"; ctx.font = "14px Arial"; ctx.fillText("Score: " + score, 10, 20);
+                
+                if(rocketX > ufoX - 15 && rocketX < ufoX + 15 && rocketY > ufoY - 15 && rocketY < ufoY + 15) { score = 0; rocketX = 400; }
+                gameAnimationId = requestAnimationFrame(update);
+            }
+            update();
+        }
+
+        // 3. सांप वाला गेम (फिक्स्ड)
+        function startSnakeGame() {
+            var canvas = document.getElementById("gameCanvas"); if(!canvas) return;
+            var ctx = canvas.getContext("2d");
+            var snake = [{x: 160, y: 80}, {x: 140, y: 80}], dx = 20, dy = 0;
+            var foodX = 240, foodY = 60, score = 0;
+
+            window.onkeydown = function(e) {
+                if((e.key === "ArrowLeft" || e.key === 'a') && dx === 0) { dx = -20; dy = 0; }
+                if((e.key === "ArrowRight" || e.key === 'd') && dx === 0) { dx = 20; dy = 0; }
+                if((e.key === "ArrowUp" || e.key === 'w') && dy === 0) { dx = 0; dy = -20; }
+                if((e.key === "ArrowDown" || e.key === 's') && dy === 0) { dx = 0; dy = 20; }
+            };
+
+            function main() {
+                snakeTimerId = setTimeout(function() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "#ff007f"; ctx.fillRect(foodX, foodY, 18, 18);
+                    
+                    var head = {x: snake[0].x + dx, y: snake[0].y + dy};
+                    if(head.x < 0) head.x = canvas.width - 20; if(head.x >= canvas.width) head.x = 0;
+                    if(head.y < 0) head.y = canvas.height - 20; if(head.y >= canvas.height) head.y = 0;
+                    snake.unshift(head);
+                    
+                    if(head.x === foodX && head.y === foodY) { score++; foodX = Math.floor(Math.random()*19)*20; foodY = Math.floor(Math.random()*6)*20; } 
+                    else { snake.pop(); }
+                    
+                    ctx.fillStyle = "#00ff87"; 
+                    snake.forEach(function(part) { ctx.fillRect(part.x, part.y, 18, 18); });
+                    
+                    ctx.fillStyle = "#fff"; ctx.font = "14px Arial"; ctx.fillText("Score: " + score, 10, 20);
+                    main();
+                }, 150);
+            }
+            main();
         }
     </script>
-<!-- विज़िटर काउंटर यहाँ पेस्ट करें -->
-<p align="center">
-  <img src="https://profile-counter.glitch.me/suranderkumar/count.svg" alt="Visitor Count" />
-</p>
-</body>  <!-- यह आपकी वेबसाइट का आखिरी टैग होगा -->
+</body>
 </html>
-
